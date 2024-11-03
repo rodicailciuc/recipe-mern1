@@ -5,11 +5,10 @@ const recipeControllers = {
         try {
             const recipes = await Recipe.find();
             if (recipes.length === 0) {
-                return res.status(404).json({ message: 'No recipes found'});
+                return res.status(404).json({ message: 'No recipes found' });
             } else {
                 res.status(200).json(recipes);
             }
-            
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
@@ -17,7 +16,7 @@ const recipeControllers = {
     getRecipe: async (req, res) => {
         const { id } = req.params;
         try {
-            const recipe = await Recipe.findById({ _id: id});
+            const recipe = await Recipe.findById({ _id: id });
             if (!recipe) {
                 return res.status(404).json({ message: 'Recipe not found' });
             }
@@ -30,16 +29,15 @@ const recipeControllers = {
         const { title, ingredients, description, image } = req.body;
         try {
             if (title && ingredients && description && image) {
-               const newRecipe = new Recipe({
+                const newRecipe = new Recipe({
                     title: title,
                     ingredients: ingredients,
                     description: description,
                     image: image
                 });
-                 await newRecipe.save();
-                 res.status(201).json(newRecipe);
+                await newRecipe.save();
+                res.status(201).json(newRecipe);
             }
-                       
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
@@ -48,13 +46,14 @@ const recipeControllers = {
         const { id } = req.params;
         const { title, ingredients, description, image } = req.body;
         try {
-            const updatedRecipe = await Recipe.findOneAndUpdate({ _id: id },
+            const updatedRecipe = await Recipe.findOneAndUpdate(
+                { _id: id },
                 {
                     $set: {
                         title: title,
                         ingredients: ingredients,
                         description: description,
-                        image: image 
+                        image: image
                     }
                 }
             );
@@ -65,7 +64,6 @@ const recipeControllers = {
                     message: 'Recipe updated'
                 });
             }
-            
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
@@ -77,8 +75,10 @@ const recipeControllers = {
             if (deletedRecipe.deletedCount === 0) {
                 return res.status(400).json({ message: 'Recipe not deleted' });
             } else {
-                res.status(200).json({ message: 'Recipe deleted successfully' });
-            }            
+                res.status(200).json({
+                    message: 'Recipe deleted successfully'
+                });
+            }
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
